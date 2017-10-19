@@ -23,18 +23,9 @@ airtemp = [station['airTemp'] for station in txmeso_data]
 # initialize the map
 m = folium.Map(location=[30.334694,-97.781949],zoom_start=10, tiles='Stamen Terrain')
 
-# add layers from geoserver pi
-txdot_counties_detailed = get('http://10.10.11.54:8080/geoserver/tnris/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tnris:txdot-2015-county-generalized_tx&maxFeatures=254&outputFormat=application%2Fjson').json()
-folium.GeoJson(
-    txdot_counties_detailed,
-    name='Counties'
-).add_to(m)
-
-txdot_counties_detailed = get('http://10.10.11.54:8080/geoserver/tnris/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tnris:txdot_2015_county_detailed_tx&maxFeatures=254&outputFormat=application%2Fjson').json()
-folium.GeoJson(
-    txdot_counties_detailed,
-    name='Counties Detailed'
-).add_to(m)
+# add additional base maps
+folium.TileLayer('Stamen Toner').add_to(m)
+folium.TileLayer('openstreetmap').add_to(m)
 
 folium.LayerControl().add_to(m)
 
