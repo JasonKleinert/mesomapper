@@ -40,17 +40,23 @@ folium.TileLayer('https://{s}.tile.thunderforest.com/pioneer/{z}/{x}/{y}.png?api
 
 
 # add layers from geoserver pi
-txdot_counties_detailed = get('http://10.10.11.63:8080/geoserver/tnris/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tnris:txdot_2015_county_detailed_tx&maxFeatures=254&outputFormat=application%2Fjson').json()
+txdot_counties_detailed = get('http://10.10.11.66:8080/geoserver/tnris/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tnris:txdot_2015_county_detailed_tx&maxFeatures=254&outputFormat=application%2Fjson').json()
+for name, row in txdot_counties_detailed.items():
+    print(name, row)
 folium.GeoJson(
     txdot_counties_detailed,
-    name='Counties Detailed'
+    name='TX Counties',
+    style_function = lambda feature: {'fillColor': '#848484','color': '#545454', 'weight': 1.5,'dashArray': '5, 5'},
+    highlight_function = lambda feature: {'fillColor': '#CDCDCD','color': 'green', 'weight': 3,'dashArray': '5, 5'}).add_child(folium.Popup('jason is the coolest')).add_to(m)
+
+tx_bathymetry = get('http://10.10.11.66:8080/geoserver/tnris/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tnris:tx_coast_bathymetry&maxFeatures=200&outputFormat=application%2Fjson').json()
+folium.GeoJson(
+    tx_bathymetry,
+    name='TX Coastal Bathymetry'
 ).add_to(m)
 
-txdot_counties_detailed = get('http://10.10.11.63:8080/geoserver/tnris/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tnris:tx_coast_bathymetry&maxFeatures=200&outputFormat=application%2Fjson').json()
-folium.GeoJson(
-    txdot_counties_detailed,
-    name='Coastal Bathymetry'
-).add_to(m)
+# tx_counties_wms = 'http://10.10.11.66:8080/geoserver/tnris/wms'
+# folium.WmsTileLayer(url=tx_counties_wms, name='Counties WMS', layers='tnris:txdot_2015_county_detailed_tx', attr="TxDOT", fmt='image/png').add_to(m)
 
 folium.LayerControl().add_to(m)
 
