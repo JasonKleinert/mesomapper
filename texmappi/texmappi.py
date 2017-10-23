@@ -49,7 +49,7 @@ for feature in txdot_counties_detailed['features']:
     popup = folium.Popup(county_name + ' County')
     gj = folium.GeoJson(
             feature,
-            style_function = lambda feature: {'color': '#545454', 'weight': 1.5,'dashArray': '5, 5'})
+            style_function = lambda feature: {'fillColor': '#F8F9F9', 'color': '#545454', 'weight': 1.5,'dashArray': '5, 5'})
     gj.add_child(popup)
     gj.add_to(counties_group)
 
@@ -57,17 +57,16 @@ for feature in txdot_counties_detailed['features']:
 # folium.GeoJson(state_parks,
 #                name='State Parks').add_to(m)
 
-# parks_group =folium.FeatureGroup(name='State Parks').add_to(m)
-#
-# state_parks = get('http://10.10.11.66:8080/geoserver/tnris/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tnris:TPWD%20State%20Parks&maxFeatures=50&outputFormat=application%2Fjson').json()
-# for feature in state_parks['features']:
-#     park_name = feature['properties']['loname']
-#     print(park_name)
-#     popup = folium.Popup(park_name)
-#     gj = folium.GeoJson(
-#             feature)
-#     # gj.add_child(popup)
-#     gj.add_to(parks_group)
+parks_group =folium.FeatureGroup(name='State Parks').add_to(m)
+
+state_parks = get('http://10.10.11.66:8080/geoserver/tnris/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tnris:TPWD%20State%20Parks&maxFeatures=50&outputFormat=application%2Fjson').json()
+for feature in state_parks['features']:
+    park_name = feature['properties']['loname']
+    print(park_name)
+    gj = folium.GeoJson(
+            feature,
+            style_function=lambda feature: {'fillColor': '#28B463', 'color': '#545454', 'weight': 1})
+    gj.add_to(parks_group)
 
 # gould_group =folium.FeatureGroup(name='Gould Eco Regions').add_to(m)
 # # add layers from geoserver pi
@@ -83,8 +82,8 @@ for feature in txdot_counties_detailed['features']:
 
 
 # folium.GeoJson(
-#     txdot_counties_detailed,
-#     name='TX Counties',
+#     state_parks,
+#     name='State Parks',
 #     style_function = lambda feature: {'fillColor': '#00ffffff','color': '#545454', 'weight': 1.5,'dashArray': '5, 5'},
 #     highlight_function = lambda feature: {'fillColor': '#848484','color': 'green', 'weight': 3,'dashArray': '5, 5'}).add_child(folium.Popup('jason is the coolest')).add_to(m)
 
