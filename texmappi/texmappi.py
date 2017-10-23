@@ -29,10 +29,10 @@ m = folium.Map(location=[30.334694,-97.781949],zoom_start=6, control_scale=True,
 # add additional base maps
 # folium.TileLayer('Stamen Terrain', name='Stamen Terrain').add_to(m)
 # folium.TileLayer('Stamen Toner', name='Stamen Toner').add_to(m)
-folium.TileLayer('Stamen Watercolor', name='Stamen Watercolor').add_to(m)
 folium.TileLayer('https://{s}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png?apikey=47c1ac00fc2d4af9b0b9a6a4a5545341', name='Spinal Map', attr='Thunderforest').add_to(m)
 # folium.TileLayer('https://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=47c1ac00fc2d4af9b0b9a6a4a5545341', name='Transport Dark', attr='Thunderforest').add_to(m)
 folium.TileLayer('https://{s}.tile.thunderforest.com/pioneer/{z}/{x}/{y}.png?apikey=47c1ac00fc2d4af9b0b9a6a4a5545341', name='Pioneer', attr='Thunderforest').add_to(m)
+folium.TileLayer('Stamen Watercolor', name='Stamen Watercolor').add_to(m)
 
 # more basemaps
 # folium.TileLayer('https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=47c1ac00fc2d4af9b0b9a6a4a5545341', name='Outdoors', attr='Thunderforest').add_to(m)
