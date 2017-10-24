@@ -27,9 +27,9 @@ airtemp = [station['airTemp'] for station in txmeso_data]
 m = folium.Map(location=[30.334694,-97.781949],zoom_start=6, control_scale=True, tiles=None)
 
 # add additional base maps
-folium.TileLayer('Stamen Toner', name='Stamen Toner').add_to(m)
-folium.TileLayer('https://{s}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png?apikey=47c1ac00fc2d4af9b0b9a6a4a5545341', name='Spinal Map', attr='Thunderforest').add_to(m)
 folium.TileLayer('https://{s}.tile.thunderforest.com/pioneer/{z}/{x}/{y}.png?apikey=47c1ac00fc2d4af9b0b9a6a4a5545341', name='Pioneer', attr='Thunderforest').add_to(m)
+folium.TileLayer('https://{s}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png?apikey=47c1ac00fc2d4af9b0b9a6a4a5545341', name='Spinal Map', attr='Thunderforest').add_to(m)
+folium.TileLayer('Stamen Toner', name='Stamen Toner').add_to(m)
 folium.TileLayer('Stamen Watercolor', name='Stamen Watercolor').add_to(m)
 
 # more basemaps
@@ -42,19 +42,26 @@ folium.TileLayer('Stamen Watercolor', name='Stamen Watercolor').add_to(m)
 # folium.TileLayer('https://{s}.tile.thunderforest.com/neighbourhood/{z}/{x}/{y}.png?apikey=47c1ac00fc2d4af9b0b9a6a4a5545341', name='neighbourhood', attr='Thunderforest').add_to(m)
 # folium.TileLayer('https://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey=47c1ac00fc2d4af9b0b9a6a4a5545341', name='Transport', attr='Thunderforest').add_to(m)
 
-
+# geojson features from geoserver pi
 counties_group =folium.FeatureGroup(name='Counties').add_to(m)
-# add layers from geoserver pi
 txdot_counties_detailed = get('http://10.10.11.66:8080/geoserver/tnris/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tnris:txdot_2015_county_detailed_tx&maxFeatures=254&outputFormat=application%2Fjson').json()
 for feature in txdot_counties_detailed['features']:
     county_name = feature['properties']['CNTY_NM']
     popup = folium.Popup(county_name + ' County')
     gj = folium.GeoJson(
             feature,
-            style_function = lambda feature: {'fillColor': '#F8F9F9', 'fillOpacity': 0, 'color': '#545454', 'weight': 1})
+            style_function = lambda feature: {'fillColor': '#F8F9F9', 'fillOpacity': 0, 'color': '#545454', 'weight': 1, 'bubblingMouseEvents': False})
     gj.add_child(popup)
     gj.add_to(counties_group)
 
+# state park geojson features
+# folium.GeoJson(
+#     state_parks,
+#     name='State Parks',
+#     style_function = lambda feature: {'fillColor': '#00ffffff','color': '#545454', 'weight': 1.5,'dashArray': '5, 5'},
+#     highlight_function = lambda feature: {'fillColor': '#848484','color': 'green', 'weight': 3,'dashArray': '5, 5'}).add_child(folium.Popup('jason is the coolest')).add_to(m)
+
+# wms layers from geoserver pi
 folium.WmsTileLayer(url='http://10.10.11.66:8080/geoserver/tnris/wms',
                     name='State Parks',
                     layers='tnris:TPWD State Parks',
@@ -68,13 +75,6 @@ folium.WmsTileLayer(url='http://10.10.11.66:8080/geoserver/tnris/wms',
                     transparent=True,
                     fmt='image/png',
                     attr='TPWD').add_to(m)
-
-# state park geojson features
-# folium.GeoJson(
-#     state_parks,
-#     name='State Parks',
-#     style_function = lambda feature: {'fillColor': '#00ffffff','color': '#545454', 'weight': 1.5,'dashArray': '5, 5'},
-#     highlight_function = lambda feature: {'fillColor': '#848484','color': 'green', 'weight': 3,'dashArray': '5, 5'}).add_child(folium.Popup('jason is the coolest')).add_to(m)
 
 # mesowest stations for travis county
 mesowest_url = 'http://api.mesowest.net/v2/stations/metadata?&state=tx&county=Travis&token=demotoken'
